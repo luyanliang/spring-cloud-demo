@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope   // 替换配置Bean
 public class HelloWorldController {
 
-    @Value("${common.name}")
+    @Value("${project.domain}")
     private String name;
 
     @GetMapping("test/value")

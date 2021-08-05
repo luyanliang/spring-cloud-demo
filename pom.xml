@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>spring-cloud-alibaba-nacos-discovery</module>
-        <module>spring-cloud-alibaba-nacos-order</module>
         <module>spring-cloud-alibaba-nacos-config</module>
+        <module>demo-order-service</module>
+        <module>demo-order-client</module>
     </modules>
 
     <parent>

@@ -20,8 +20,8 @@ public class NacosConfigApplication {
 
         while (true) {
             //当动态配置刷新时，会更新到 Enviroment中，因此这里每隔一秒中从Enviroment中获取配置
-            String userName = applicationContext.getEnvironment().getProperty("common.name");
-            String userAge = applicationContext.getEnvironment().getProperty("common.age");
+            String userName = applicationContext.getEnvironment().getProperty("project.domain");
+            String userAge = applicationContext.getEnvironment().getProperty("project.front-domain");
             System.err.println("common name :" + userName + "; age: " + userAge);
             TimeUnit.SECONDS.sleep(3);
         }
