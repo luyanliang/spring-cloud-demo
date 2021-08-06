@@ -1,8 +1,7 @@
 package com.luke.spring.cloud.nacos;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.SpringCloudApplication;
 
 /**
  * functional describe:
@@ -10,8 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author luyanliang [765673481@qq.com]
  * @version 1.0 2021-07-31 10:25
  */
-@SpringBootApplication
-@EnableDiscoveryClient
+@SpringCloudApplication
 public class OrderApplication {
 
     public static void main(String[] args) {
