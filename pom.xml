@@ -8,6 +8,7 @@
         <module>spring-cloud-alibaba-nacos-config</module>
         <module>demo-order-service</module>
         <module>demo-order-client</module>
+        <module>demo-user-service</module>
     </modules>
 
     <parent>
