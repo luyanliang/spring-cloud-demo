@@ -24,3 +24,6 @@ spring:
         uri: lb://demo-user
         predicates:
           - Path=/user/**
+          - CheckAuth=luke
+        filters:
+          - CheckAuth=luke, 男
