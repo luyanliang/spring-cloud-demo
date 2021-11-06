@@ -1,17 +1,44 @@
+[TOC]
 
 ### 一、服务治理：Spring Cloud Eureka/Nacos
 
 #### 介绍
 
 * 作用：实现各个**微服务实例的自动化注册与发现**；
+
 * 解决了什么问题：多个微服实例之间相互调用时，每个调用方都需记录被调方的地址列表，当服务越多时维护成本也增加。服务治理则是把所有实例地址都放到一个地方，当需要调用对方时，只需要从维护的地址列表中找到被调方地址即可，大大简化了服务地址维护问题。
 
-    * 服务注册中心：每个服务单元向注册中心登记自己提供的服务，将主机与端口号、版本号、通信协议等一些附加信息告知注册中心，注册中心按服务名分类组织服务清单。
-    * 服务发现：调用方向注册中心咨询服务，并获取所有服务的实例清单，以实现对具体服务实例的访问。
+#### Eureka 介绍
+
+![基础架构](http://learn.fhmou.com/20210807111240.png)
+
+* **服务注册中心**：每个服务单元向注册中心登记自己提供的服务，将主机与端口号、版本号、通信协议等一些附加信息告知注册中心，注册中心按服务名分类组织服务清单。
+  * 失效剔除：为了监控服务是否一致处于正常状态，注册中心会有一个定时任务，每隔一段时间将当前清单中超时没有续约的服务剔除出去；
+* **服务提供者**：提供服务的应用；
+  * 服务注册：`服务提供者`在启动的时候会通过发送REST请求将自己注册到注册中心，同时带上自身服务的一些元数据信息。Eureka Server接收到这个REST请求之后，将元数据信息存储在一个双层结构Map中，其中第一层的key是服务名，第二层的Key是具体服务的实例名。
+  * 服务同步：为了实现注册中心的高可用，就需要搭建多个注册中心，让他们各自向其他注册中心注册自己。当服务提供者发送注册请求到一个服务注册中心时，它会将该请求转发给集群中相连的其他注册中心，从而实现注册中心之间的服务同步。
+  * 服务续约：在注册服务之后，服务提供者会维护一个心跳用户持续告诉注册中心自己还活着，不要把自己剔除出去。
+* **服务消费者**：消费者从服务中心获取服务列表，从而使消费者可以知道去何处调用其所需的服务。
+  * 获取服务：服务消费者启动后，会发送一个REST请求向注册中心拉取一份服务清单，同时为了性能考虑会把服务清单缓存在本地，默认每30秒更新一次清单。
+  * 服务调用：在进行服务调用时，可能存在服务提供者有多个实例，这时会通过Ribbon来进行轮询的方式进行调用。
+  * 服务下线：当服务实例进行正常关闭时，它会触发一个服务下线的REST请求给注册中心说：“我要下线了”。
 
 ### 二、客户端负载均衡：Spring Cloud Ribbon
 
+* 无论是硬件层级的负载均衡还是软件层面的负载均衡，都必须有一个心跳机制来检测服务节点可用性；
+* 客户端负载均衡的服务清单是由客户端负载维护，服务端负载均衡的服务清单有服务端负载维护；
+
+Spring Cloud Ribbon是一个基于HTTP和TCP的**客户端负载均衡工具**。它是一个工具类框架，不需要独立部署。
+
+
+
 ### 三、服务容错保护：Spring Cloud Hystrix
+
+在微服务架构中，存在着那么多的服务单元，若一个单元出现故障，就很容易因依赖关系而引发故障的蔓延，最终导致整个系统的瘫痪，这样的架构相较于传统架构更加不稳定。为了解决这样的问题，产生了断路器等一系列的服务保护机制。
+
+断路器的作用：当某个服务单元发生故障之后，通过断路器的故障监控，向调用方返回一个错误响应，而不是长时间的等待。这样就不会使得线程因调用故障服务被长时间占用不释放，避免了故障在分布式系统中的蔓延。
+
+Hystrix目标在于通过控制那么访问远程系统、服务和第三方库的节点，从而对延迟和故障提供更强大的容错能力。
 
 ### 四、声明式服务调用：Spring Cloud Feign/OpenFeign
 
@@ -24,59 +51,3 @@
 ### 八、消息驱动的微服务：Spring Cloud Stream
 
 ### 九、分布式服务跟踪：Spring Cloud Sleuth
-
-
-## Nacos
-
-* [nacos官网](https://nacos.io/zh-cn/index.html)
-* [spring-cloud-alibaba 版本说明](https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)
-
-> 节点注册都注册到服务中心后，是不能直接通过对方的`服务名`进行调用的。
-
-LoadBalanced与RestTemplate整合方式：
-
-```java
-public class RestConfig {
-
-    /**
-     * 第一种方式：直接在 restTemplate() 方法上加 @LoadBalanced 注解
-     */
-    @Bean
-    @LoadBalanced
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
-    
-    /**
-     * 第二种方式：在restTemplate过滤器中添加LoadBalancer
-     */
-    @Autowired
-    private LoadBalancerClient loadBalancerClient;
-    
-    @Bean
-    public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        LoadBalancerInterceptor interceptor = new LoadBalancerInterceptor(loadBalancerClient);
-        restTemplate.setInterceptors(Collections.singletonList(interceptor));
-        return restTemplate;
-    }
-
-
-    /**
-     * 第三种方式：在请求地址中直接通过LoadBalancer来获取地址 
-     */
-    @Autowired
-    private LoadBalancerClient loadBalancerClient;
-
-    @GetMapping("/echo/app-name")
-    public String echoAppName(){
-        //使用 LoadBalanceClient 和 RestTemolate 结合的方式来访问
-        ServiceInstance serviceInstance = loadBalancerClient.choose("nacos-provider");
-        String url = String.format("http://%s:%s/echo/%s",serviceInstance.getHost(),serviceInstance.getPort(),appName);
-        System.out.println("request url:"+url);
-        return restTemplate.getForObject(url,String.class);
-    }
-}
-```
-
