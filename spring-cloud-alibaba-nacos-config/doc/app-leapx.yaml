@@ -1,0 +1,14 @@
+project:
+  domain: http://portal-sit.luke.com/
+  front-domain: https://staticres-sit.luke.com/
+  singleLogin: false
+  activePro: false
+
+level:
+  list:
+    - {name: O级, value: 6, defaultNum: 5, maxNum: 15, minNum: 0}
+    - {name: A级, value: 0, defaultNum: 2, maxNum: 15, minNum: 0}
+    - {name: B级, value: 1, defaultNum: 7, maxNum: 30, minNum: 0}
+    - {name: C级, value: 2, defaultNum: 15, maxNum: 30, minNum: 1}
+    - {name: D级, value: 3, defaultNum: 15, maxNum: 30, minNum: 1}
+    - {name: F级, value: 5, defaultNum: 15, maxNum: 30, minNum: 0}
