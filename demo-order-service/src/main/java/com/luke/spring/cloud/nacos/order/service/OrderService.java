@@ -3,7 +3,7 @@ package com.luke.spring.cloud.nacos.order.service;
 import com.luke.spring.cloud.nacos.order.entity.OrderEntity;
 
 /**
- * @author LuYanLiang [lu_yanliang@leapmotor.com]
+ * @author LuYanLiang [765673481@qq.com]
  * @since 2021/8/5 20:13
  */
 public interface OrderService {

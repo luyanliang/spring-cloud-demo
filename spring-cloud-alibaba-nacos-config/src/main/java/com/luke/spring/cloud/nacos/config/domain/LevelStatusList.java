@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author LuYanLiang [lu_yanliang@leapmotor.com]
+ * @author LuYanLiang [765673481@qq.com]
  * @since 2021/11/6 9:53
  */
 @Configuration

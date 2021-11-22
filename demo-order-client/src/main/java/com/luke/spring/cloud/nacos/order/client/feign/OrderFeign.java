@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- * @author LuYanLiang [lu_yanliang@leapmotor.com]
+ * @author LuYanLiang [765673481@qq.com]
  * @since 2021/8/5 20:25
  */
 @Component

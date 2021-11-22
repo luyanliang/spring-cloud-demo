@@ -5,7 +5,7 @@ import com.luke.spring.cloud.nacos.order.service.OrderService;
 import org.springframework.stereotype.Service;
 
 /**
- * @author LuYanLiang [lu_yanliang@leapmotor.com]
+ * @author LuYanLiang [765673481@qq.com]
  * @since 2021/8/5 20:14
  */
 @Service
