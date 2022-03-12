@@ -10,6 +10,7 @@
         <module>demo-order-client</module>
         <module>demo-user-service</module>
         <module>spring-cloud-gateway</module>
+        <module>spring-cloud-oauth2</module>
     </modules>
 
     <parent>
